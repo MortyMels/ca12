@@ -11,6 +11,7 @@ class Audit extends Model
     protected $fillable = [
         'type',
         'template_id',
+        'organization_id',
         'status',
         'notes'
     ];
@@ -30,6 +31,11 @@ class Audit extends Model
     public function template(): BelongsTo
     {
         return $this->belongsTo(Template::class);
+    }
+
+    public function organization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class);
     }
 
     public function visits(): HasMany

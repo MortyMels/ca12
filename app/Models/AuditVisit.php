@@ -4,14 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class AuditVisit extends Model
 {
     protected $fillable = [
         'audit_id',
+        'branch_id',
         'visit_date',
         'type',
-        'responsible_user_id',
         'notes'
     ];
 
@@ -28,9 +29,15 @@ class AuditVisit extends Model
         return $this->belongsTo(Audit::class);
     }
 
-    public function responsibleUser(): BelongsTo
+    public function branch(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'responsible_user_id');
+        return $this->belongsTo(Branch::class);
+    }
+
+    public function responsibleUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'audit_visit_responsible_users')
+            ->withTimestamps();
     }
 
     public function getTypeLabelAttribute(): string

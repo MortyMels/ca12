@@ -21,6 +21,7 @@ Route::middleware(['auth'])->group(function () {
     // Маршрут для страницы шаблонов
     Volt::route('templates', 'templates.template-list')->name('templates');
     Volt::route('organizations', 'organizations.organization-list')->name('organizations');
+    Volt::route('audits', 'audits.audit-list')->name('audits');
 });
 
 require __DIR__.'/auth.php';

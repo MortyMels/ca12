@@ -33,6 +33,7 @@
                                 {{ $audit->status_label }}
                             </span>
                         </div>
+                        <p class="text-gray-600 mt-1">Организация: {{ $audit->organization->name }}</p>
                         @if($audit->notes)
                             <p class="text-gray-600 mt-1">{{ $audit->notes }}</p>
                         @endif
@@ -55,7 +56,15 @@
                                             {{ $visit->type_label }}
                                         </span>
                                     </div>
-                                    <p class="text-gray-600 mt-1">Ответственный: {{ $visit->responsibleUser->name }}</p>
+                                    <div class="text-gray-600 mt-1">
+                                        <p class="font-medium">Филиал: {{ $visit->branch->name }}</p>
+                                        <p class="font-medium mt-2">Ответственные:</p>
+                                        <ul class="list-disc list-inside mt-1">
+                                            @foreach($visit->responsibleUsers as $user)
+                                                <li>{{ $user->name }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                     @if($visit->notes)
                                         <p class="text-gray-600 mt-1">{{ $visit->notes }}</p>
                                     @endif
@@ -105,6 +114,19 @@
                                 @endforeach
                             </select>
                             @error('audit.template_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="organization_id">
+                                Организация *
+                            </label>
+                            <select wire:model="audit.organization_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="organization_id">
+                                <option value="">Выберите организацию</option>
+                                @foreach($organizations as $organization)
+                                    <option value="{{ $organization->id }}">{{ $organization->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('audit.organization_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="mb-4">
@@ -161,6 +183,19 @@
                         </div>
 
                         <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="branch_id">
+                                Филиал *
+                            </label>
+                            <select wire:model="visit.branch_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="branch_id">
+                                <option value="">Выберите филиал</option>
+                                @foreach($availableBranches as $branch)
+                                    <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('visit.branch_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="visit_type">
                                 Тип выезда *
                             </label>
@@ -173,16 +208,16 @@
                         </div>
 
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="responsible_user_id">
-                                Ответственный *
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="responsible_user_ids">
+                                Ответственные *
                             </label>
-                            <select wire:model="visit.responsible_user_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="responsible_user_id">
-                                <option value="">Выберите ответственного</option>
+                            <select wire:model="visit.responsible_user_ids" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="responsible_user_ids" multiple>
                                 @foreach($users as $user)
                                     <option value="{{ $user->id }}">{{ $user->name }}</option>
                                 @endforeach
                             </select>
-                            @error('visit.responsible_user_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            @error('visit.responsible_user_ids') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            <p class="text-gray-500 text-xs mt-1">Для выбора нескольких ответственных удерживайте Ctrl (Cmd на Mac)</p>
                         </div>
 
                         <div class="mb-4">
