@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class AuditVisit extends Model
 {
@@ -32,6 +33,11 @@ class AuditVisit extends Model
     {
         return $this->belongsToMany(User::class, 'audit_visit_responsible_users')
             ->withTimestamps();
+    }
+
+    public function marks(): HasMany
+    {
+        return $this->hasMany(Mark::class);
     }
 
     public function getTypeLabelAttribute(): string

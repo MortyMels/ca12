@@ -22,6 +22,7 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('templates', 'templates.template-list')->name('templates');
     Volt::route('organizations', 'organizations.organization-list')->name('organizations');
     Volt::route('audits', 'audits.audit-list')->name('audits');
+    Route::get('/marks', App\Livewire\Marks\MarkList::class)->name('marks.index');
 });
 
 require __DIR__.'/auth.php';

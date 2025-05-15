@@ -19,6 +19,8 @@ class AuditList extends Component
     public $showVisitModal = false;
     
     public $auditId;
+    public $branches = [];
+    
     public $audit = [
         'type' => '',
         'template_id' => '',
@@ -49,6 +51,19 @@ class AuditList extends Component
         'visit.responsible_user_ids.*' => 'exists:users,id',
         'visit.notes' => 'nullable'
     ];
+
+    public function mount()
+    {
+        $this->branches = [];
+    }
+
+    public function updated($property, $value)
+    {
+        if ($property === 'audit.organization_id') {
+            $this->audit['branch_id'] = '';
+            $this->branches = Branch::where('organization_id', $value)->get();
+        }
+    }
 
     public function createAudit()
     {

@@ -137,11 +137,9 @@
                             </label>
                             <select wire:model="audit.branch_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="branch">
                                 <option value="">Выберите филиал</option>
-                                @if($audit['organization_id'])
-                                    @foreach($organizations->firstWhere('id', $audit['organization_id'])->branches as $branch)
-                                        <option value="{{ $branch->id }}">{{ $branch->name }}</option>
-                                    @endforeach
-                                @endif
+                                @foreach($branches as $branch)
+                                    <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                                @endforeach
                             </select>
                             @error('audit.branch_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
