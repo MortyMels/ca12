@@ -34,6 +34,9 @@
                             </span>
                         </div>
                         <p class="text-gray-600 mt-1">Организация: {{ $audit->organization->name }}</p>
+                        @if($audit->branch)
+                            <p class="text-gray-600">Филиал: {{ $audit->branch->name }}</p>
+                        @endif
                         @if($audit->notes)
                             <p class="text-gray-600 mt-1">{{ $audit->notes }}</p>
                         @endif
@@ -57,8 +60,7 @@
                                         </span>
                                     </div>
                                     <div class="text-gray-600 mt-1">
-                                        <p class="font-medium">Филиал: {{ $visit->branch->name }}</p>
-                                        <p class="font-medium mt-2">Ответственные:</p>
+                                        <p class="font-medium">Ответственные:</p>
                                         <ul class="list-disc list-inside mt-1">
                                             @foreach($visit->responsibleUsers as $user)
                                                 <li>{{ $user->name }}</li>
@@ -117,16 +119,31 @@
                         </div>
 
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="organization_id">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="organization">
                                 Организация *
                             </label>
-                            <select wire:model="audit.organization_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="organization_id">
+                            <select wire:model="audit.organization_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="organization">
                                 <option value="">Выберите организацию</option>
                                 @foreach($organizations as $organization)
                                     <option value="{{ $organization->id }}">{{ $organization->name }}</option>
                                 @endforeach
                             </select>
                             @error('audit.organization_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="branch">
+                                Филиал
+                            </label>
+                            <select wire:model="audit.branch_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="branch">
+                                <option value="">Выберите филиал</option>
+                                @if($audit['organization_id'])
+                                    @foreach($organizations->firstWhere('id', $audit['organization_id'])->branches as $branch)
+                                        <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            @error('audit.branch_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="mb-4">
@@ -180,19 +197,6 @@
                             </label>
                             <input wire:model="visit.visit_date" type="datetime-local" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="visit_date">
                             @error('visit.visit_date') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="branch_id">
-                                Филиал *
-                            </label>
-                            <select wire:model="visit.branch_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="branch_id">
-                                <option value="">Выберите филиал</option>
-                                @foreach($availableBranches as $branch)
-                                    <option value="{{ $branch->id }}">{{ $branch->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('visit.branch_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="mb-4">

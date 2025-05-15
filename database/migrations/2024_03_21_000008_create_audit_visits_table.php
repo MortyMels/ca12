@@ -11,7 +11,6 @@ return new class extends Migration
         Schema::create('audit_visits', function (Blueprint $table) {
             $table->id();
             $table->foreignId('audit_id')->constrained()->onDelete('cascade');
-            $table->foreignId('branch_id')->constrained()->onDelete('restrict');
             $table->dateTime('visit_date');
             $table->string('type'); // primary, repeat
             $table->text('notes')->nullable();

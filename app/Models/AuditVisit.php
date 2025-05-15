@@ -10,7 +10,6 @@ class AuditVisit extends Model
 {
     protected $fillable = [
         'audit_id',
-        'branch_id',
         'visit_date',
         'type',
         'notes'
@@ -27,11 +26,6 @@ class AuditVisit extends Model
     public function audit(): BelongsTo
     {
         return $this->belongsTo(Audit::class);
-    }
-
-    public function branch(): BelongsTo
-    {
-        return $this->belongsTo(Branch::class);
     }
 
     public function responsibleUsers(): BelongsToMany

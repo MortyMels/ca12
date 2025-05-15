@@ -12,6 +12,7 @@ class Audit extends Model
         'type',
         'template_id',
         'organization_id',
+        'branch_id',
         'status',
         'notes'
     ];
@@ -36,6 +37,11 @@ class Audit extends Model
     public function organization(): BelongsTo
     {
         return $this->belongsTo(Organization::class);
+    }
+
+    public function branch(): BelongsTo
+    {
+        return $this->belongsTo(Branch::class);
     }
 
     public function visits(): HasMany
